@@ -6,6 +6,7 @@ import Logo from "@/components/shared/Logo";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
+import HospitalPicker from "@/components/ui/HospitalPicker";
 
 type Step = "personal" | "medical" | "syncing" | "done";
 
@@ -33,8 +34,8 @@ export default function OnboardingPage() {
 
   const handleMedicalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.hospitalName) return;
     setStep("syncing");
-    // Simulate EMR sync
     setTimeout(() => setStep("done"), 2500);
   };
 
@@ -49,7 +50,7 @@ export default function OnboardingPage() {
           </div>
           <h2 className="text-heading-2 text-navy-700 mb-2">Syncing your records...</h2>
           <p className="text-body text-gray-500">
-            Connecting to {formData.hospitalName || "your hospital"} system
+            Connecting to {formData.hospitalName || "your hospital"}
           </p>
         </div>
       </div>
@@ -72,6 +73,10 @@ export default function OnboardingPage() {
           <div className="card my-6 text-left">
             <div className="space-y-2">
               <div className="flex justify-between">
+                <span className="text-gray-500">Hospital</span>
+                <span className="font-medium text-navy-700">{formData.hospitalName}</span>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-gray-500">Diagnosis</span>
                 <span className="font-medium text-navy-700">Type 2 Diabetes</span>
               </div>
@@ -86,8 +91,11 @@ export default function OnboardingPage() {
             </div>
           </div>
           <Button fullWidth size="lg" onClick={() => router.push("/home")}>
-            Go to Dashboard
+            Start Logging
           </Button>
+          <p className="text-xs text-gray-400 mt-3">
+            You can review your full profile anytime from the Profile tab
+          </p>
         </div>
       </div>
     );
@@ -100,7 +108,7 @@ export default function OnboardingPage() {
 
         {/* Progress indicator */}
         <div className="flex gap-2 mb-8">
-          <div className={`h-1.5 flex-1 rounded-full ${step === "personal" ? "bg-primary-500" : "bg-primary-200"}`} />
+          <div className={`h-1.5 flex-1 rounded-full ${step === "personal" || step === "medical" ? "bg-primary-500" : "bg-gray-200"}`} />
           <div className={`h-1.5 flex-1 rounded-full ${step === "medical" ? "bg-primary-500" : "bg-gray-200"}`} />
         </div>
 
@@ -176,11 +184,11 @@ export default function OnboardingPage() {
               helperText="Found on your hospital medical booklet"
               required
             />
-            <Input
-              label="Hospital Name"
-              placeholder="e.g. Bangkok General Hospital"
+
+            <HospitalPicker
+              label="Hospital"
               value={formData.hospitalName}
-              onChange={(e) => updateField("hospitalName", e.target.value)}
+              onChange={(val) => updateField("hospitalName", val)}
               required
             />
 
@@ -200,7 +208,12 @@ export default function OnboardingPage() {
               >
                 Back
               </Button>
-              <Button type="submit" fullWidth size="lg">
+              <Button
+                type="submit"
+                fullWidth
+                size="lg"
+                disabled={!formData.hospitalName}
+              >
                 Sync Records
               </Button>
             </div>

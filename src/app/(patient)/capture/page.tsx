@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Card from "@/components/ui/Card";
@@ -13,15 +13,38 @@ import { cn } from "@/lib/utils";
 type CaptureStep = "category" | "photo" | "details" | "confirm";
 
 export default function CapturePage() {
+  return (
+    <Suspense fallback={<div className="page-container"><p className="text-gray-400 text-center py-12">Loading...</p></div>}>
+      <CapturePageContent />
+    </Suspense>
+  );
+}
+
+function CapturePageContent() {
   const router = useRouter();
-  const [step, setStep] = useState<CaptureStep>("category");
-  const [category, setCategory] = useState<EntryCategory>("medication");
+  const searchParams = useSearchParams();
+  const paramCategory = searchParams.get("category") as EntryCategory | null;
+  const paramAction = searchParams.get("action");
+
+  const [step, setStep] = useState<CaptureStep>(
+    paramCategory ? "photo" : "category"
+  );
+  const [category, setCategory] = useState<EntryCategory>(
+    paramCategory || "medication"
+  );
   const [hasPhoto, setHasPhoto] = useState(false);
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
   const [glucoseLevel, setGlucoseLevel] = useState("");
   const [bpSystolic, setBpSystolic] = useState("");
   const [bpDiastolic, setBpDiastolic] = useState("");
+
+  // If coming from a quick action, skip to details
+  useEffect(() => {
+    if (paramAction && paramCategory) {
+      setStep("details");
+    }
+  }, [paramAction, paramCategory]);
 
   const toggleSymptom = (symptom: string) => {
     setSelectedSymptoms((prev) =>
@@ -32,7 +55,6 @@ export default function CapturePage() {
   };
 
   const handleSave = () => {
-    // In a real app, save to backend
     router.push("/home");
   };
 
@@ -77,17 +99,32 @@ export default function CapturePage() {
     },
   ];
 
+  const goBack = () => {
+    if (step === "category") {
+      router.back();
+    } else if (step === "photo") {
+      if (paramCategory) {
+        router.back();
+      } else {
+        setStep("category");
+      }
+    } else if (step === "details") {
+      if (paramAction) {
+        router.back();
+      } else {
+        setStep("photo");
+      }
+    } else if (step === "confirm") {
+      setStep("details");
+    }
+  };
+
   return (
     <div className="page-container">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <button
-          onClick={() => {
-            if (step === "category") router.back();
-            else if (step === "photo") setStep("category");
-            else if (step === "details") setStep("photo");
-            else if (step === "confirm") setStep("details");
-          }}
+          onClick={goBack}
           className="p-2 rounded-xl hover:bg-gray-100 min-w-touch min-h-touch flex items-center justify-center"
           aria-label="Go back"
         >
@@ -95,25 +132,32 @@ export default function CapturePage() {
             <path d="m15 18-6-6 6-6" />
           </svg>
         </button>
-        <h1 className="text-heading-2 text-navy-700">New Entry</h1>
+        <h1 className="text-heading-2 text-navy-700">
+          {paramCategory
+            ? `Log ${CATEGORY_LABELS[category]}`
+            : "New Entry"}
+        </h1>
       </div>
 
       {/* Step indicator */}
-      <div className="flex gap-1.5 mb-6">
-        {["category", "photo", "details", "confirm"].map((s, i) => (
-          <div
-            key={s}
-            className={cn(
-              "h-1.5 flex-1 rounded-full",
-              ["category", "photo", "details", "confirm"].indexOf(step) >= i
-                ? "bg-primary-500"
-                : "bg-gray-200"
-            )}
-          />
-        ))}
-      </div>
+      {!paramAction && (
+        <div className="flex gap-1.5 mb-6">
+          {(paramCategory
+            ? ["photo", "details", "confirm"]
+            : ["category", "photo", "details", "confirm"]
+          ).map((s, i, arr) => (
+            <div
+              key={s}
+              className={cn(
+                "h-1.5 flex-1 rounded-full",
+                arr.indexOf(step) >= i ? "bg-primary-500" : "bg-gray-200"
+              )}
+            />
+          ))}
+        </div>
+      )}
 
-      {/* Step: Category */}
+      {/* Step: Category (only if no param) */}
       {step === "category" && (
         <div className="space-y-4">
           <div>
@@ -222,11 +266,7 @@ export default function CapturePage() {
           )}
 
           <div className="flex gap-3">
-            <Button
-              variant="secondary"
-              fullWidth
-              onClick={() => setStep("category")}
-            >
+            <Button variant="secondary" fullWidth onClick={goBack}>
               Back
             </Button>
             <Button fullWidth onClick={() => setStep("details")}>
@@ -325,11 +365,7 @@ export default function CapturePage() {
           </div>
 
           <div className="flex gap-3">
-            <Button
-              variant="secondary"
-              fullWidth
-              onClick={() => setStep("photo")}
-            >
+            <Button variant="secondary" fullWidth onClick={goBack}>
               Back
             </Button>
             <Button fullWidth onClick={() => setStep("confirm")}>
