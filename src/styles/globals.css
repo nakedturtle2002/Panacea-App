@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FAFAF8;
+    --surface: #FFFFFF;
+    --border: #E2E8F0;
+    --primary: #2DD4BF;
+    --primary-dark: #0F766E;
+    --text-primary: #1E3A5F;
+    --text-secondary: #64748B;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --error: #EF4444;
+    --info: #3B82F6;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-navy-700 font-sans;
+    min-height: 100vh;
+  }
+
+  /* Ensure good focus visibility for accessibility */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500 rounded-sm;
+  }
+
+  /* Larger tap targets for older users */
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
+}
+
+@layer components {
+  .page-container {
+    @apply max-w-lg mx-auto px-4 pb-24 pt-6;
+  }
+
+  .section-title {
+    @apply text-heading-2 text-navy-700 mb-4;
+  }
+
+  .card {
+    @apply bg-surface rounded-2xl border border-border p-4 shadow-sm;
+  }
+}
