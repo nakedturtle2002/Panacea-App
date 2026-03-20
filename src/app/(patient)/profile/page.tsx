@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
@@ -7,30 +8,30 @@ import Avatar from "@/components/ui/Avatar";
 import { mockPatient, mockMedicalRecord } from "@/lib/mock-data/patients";
 import { mockTreatingDoctor } from "@/lib/mock-data/doctors";
 import { mockHealthEntries } from "@/lib/mock-data/health-entries";
+import { getPatientProfile, hasPatientProfile, PatientProfile } from "@/lib/patient-store";
 import { formatDate } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
-const mockLinkedHospitals = [
-  {
-    id: "mr1",
-    hospitalName: "Bangkok General Hospital",
-    diagnosis: "Type 2 Diabetes Mellitus",
-    diseaseType: "diabetes",
-    doctor: "Dr. Piyawan Srisuk",
-    active: true,
-  },
-  {
-    id: "mr2",
-    hospitalName: "Bumrungrad International Hospital",
-    diagnosis: "Mild Eczema",
-    diseaseType: "dermatology",
-    doctor: "Dr. Nattapong Wongchai",
-    active: false,
-  },
-];
-
 export default function ProfilePage() {
-  const fullName = `${mockPatient.firstName} ${mockPatient.lastName}`;
+  const [profile, setProfile] = useState<PatientProfile | null>(null);
+
+  useEffect(() => {
+    if (hasPatientProfile()) {
+      setProfile(getPatientProfile());
+    }
+  }, []);
+
+  // Use persisted profile data if available, otherwise fall back to mock
+  const firstName = profile?.firstName || mockPatient.firstName;
+  const lastName = profile?.lastName || mockPatient.lastName;
+  const fullName = `${firstName} ${lastName}`;
+  const patientId = profile?.patientId || mockPatient.patientId;
+  const dateOfBirth = profile?.dateOfBirth || mockPatient.dateOfBirth;
+  const gender = profile?.gender || mockPatient.gender;
+  const phone = profile
+    ? `${profile.countryCode} ${profile.phone}`
+    : mockPatient.phone;
+  const hospitalName = profile?.hospitalName || mockPatient.hospitalName;
 
   const glucoseEntries = mockHealthEntries
     .filter((e) => e.healthData?.glucoseLevel)
@@ -43,6 +44,20 @@ export default function ProfilePage() {
   const bpEntries = mockHealthEntries.filter((e) => e.healthData?.bloodPressureSystolic);
   const lastBp = bpEntries[0]?.healthData;
 
+  // Build hospital list using patient's entered hospital
+  const linkedHospitals = [
+    {
+      id: "mr1",
+      hospitalName: hospitalName,
+      diagnosis: "Type 2 Diabetes Mellitus",
+      diseaseType: "diabetes",
+      doctor: mockTreatingDoctor
+        ? `${mockTreatingDoctor.firstName} ${mockTreatingDoctor.lastName}`
+        : "Dr. Assigned",
+      active: true,
+    },
+  ];
+
   return (
     <div className="page-container">
       {/* Profile header */}
@@ -50,7 +65,7 @@ export default function ProfilePage() {
         <Avatar name={fullName} size="lg" className="mb-4" />
         <h1 className="text-heading-1 text-navy-700">{fullName}</h1>
         <p className="text-body text-gray-500 mt-1">
-          Patient ID: {mockPatient.patientId}
+          Patient ID: {patientId}
         </p>
       </div>
 
@@ -102,7 +117,7 @@ export default function ProfilePage() {
           </Button>
         </div>
         <div className="space-y-3">
-          {mockLinkedHospitals.map((hospital) => (
+          {linkedHospitals.map((hospital) => (
             <Card
               key={hospital.id}
               className={cn(hospital.active && "border-primary-300 bg-primary-50/50")}
@@ -173,16 +188,15 @@ export default function ProfilePage() {
         </div>
       </section>
 
-      {/* Personal info */}
+      {/* Personal info - uses persisted data */}
       <section className="mb-8">
         <h2 className="text-heading-2 text-navy-700 mb-4">Personal Information</h2>
         <Card>
           <div className="space-y-4">
             {[
-              { label: "Date of Birth", value: formatDate(mockPatient.dateOfBirth) },
-              { label: "Gender", value: mockPatient.gender, capitalize: true },
-              { label: "Phone", value: mockPatient.phone },
-              ...(mockPatient.email ? [{ label: "Email", value: mockPatient.email }] : []),
+              { label: "Date of Birth", value: dateOfBirth ? formatDate(dateOfBirth) : "--" },
+              { label: "Gender", value: gender, capitalize: true },
+              { label: "Phone", value: phone },
             ].map((item) => (
               <div key={item.label} className="flex justify-between">
                 <span className="text-body text-gray-500">{item.label}</span>

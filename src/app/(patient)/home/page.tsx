@@ -2,15 +2,21 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { mockPatient } from "@/lib/mock-data/patients";
 import { mockNotifications } from "@/lib/mock-data/notifications";
 import { EntryCategory } from "@/types/patient";
 import { cn } from "@/lib/utils";
 
-const categories: { id: EntryCategory; label: string }[] = [
-  { id: "medication", label: "Medication" },
-  { id: "symptoms", label: "Symptoms" },
-  { id: "lifestyle", label: "Lifestyle" },
+const categories: { id: EntryCategory; label: string; icon: string }[] = [
+  { id: "medication", label: "Medication", icon: "M9 3h6v2H9zM12 8v6M9 11h6M5 7h14a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2z" },
+  { id: "symptoms", label: "Symptoms", icon: "M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
+  { id: "lifestyle", label: "Lifestyle", icon: "M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" },
+];
+
+const quickActions = [
+  { id: "bp", label: "Blood Pressure", icon: "M22 12h-4l-3 9L9 3l-3 9H2", color: "bg-red-500" },
+  { id: "glucose", label: "Glucose", icon: "M12 2v6m0 12v2M4.93 4.93l4.24 4.24m5.66 5.66l4.24 4.24M2 12h6m12 0h2M4.93 19.07l4.24-4.24m5.66-5.66l4.24-4.24", color: "bg-blue-500" },
+  { id: "symptoms", label: "Symptoms", icon: "M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM14 2v6h6M16 13H8M16 17H8M10 9H8", color: "bg-amber-500" },
+  { id: "notes", label: "Notes", icon: "M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z", color: "bg-primary-500" },
 ];
 
 export default function PatientHomePage() {
@@ -22,6 +28,10 @@ export default function PatientHomePage() {
 
   const handleCapture = () => {
     router.push(`/capture?category=${currentCat.id}&captured=true`);
+  };
+
+  const handleQuickAction = (actionId: string) => {
+    router.push(`/capture?action=${actionId}`);
   };
 
   // Swipe handling
@@ -42,11 +52,8 @@ export default function PatientHomePage() {
 
   return (
     <div className="flex flex-col h-[100dvh] bg-navy-900">
-      {/* Top bar - minimal */}
-      <div className="flex items-center justify-between px-5 py-3 bg-navy-900">
-        <p className="text-body font-semibold text-white">
-          Hi, {mockPatient.firstName}
-        </p>
+      {/* Top bar - notification only */}
+      <div className="flex items-center justify-end px-5 py-3 bg-navy-900">
         <button
           onClick={() => router.push("/notifications")}
           className="relative p-2 rounded-xl min-w-touch min-h-touch flex items-center justify-center"
@@ -64,9 +71,9 @@ export default function PatientHomePage() {
         </button>
       </div>
 
-      {/* Camera viewfinder - fills most of the screen */}
+      {/* Camera viewfinder */}
       <div
-        className="flex-1 relative mx-3 mb-3 rounded-3xl overflow-hidden bg-navy-800"
+        className="flex-1 relative mx-3 mb-2 rounded-3xl overflow-hidden bg-navy-800"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -90,33 +97,41 @@ export default function PatientHomePage() {
           </div>
         </div>
 
-        {/* Category chips at top */}
-        <div className="absolute top-4 left-0 right-0 flex justify-center gap-2 px-4">
-          {categories.map((cat, index) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(index)}
+        {/* Instagram-style category filter bar */}
+        <div className="absolute bottom-28 left-0 right-0 flex justify-center">
+          <div className="flex items-center gap-1 bg-black/20 backdrop-blur-md rounded-full px-2 py-1.5">
+            {categories.map((cat, index) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(index)}
+                className={cn(
+                  "px-5 py-2 rounded-full text-body-sm font-semibold transition-all min-h-[40px]",
+                  activeCategory === index
+                    ? "bg-primary-500 text-white shadow-lg"
+                    : "text-white/70 hover:text-white"
+                )}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Swipe hint dots */}
+        <div className="absolute bottom-20 left-0 right-0 flex justify-center gap-1.5">
+          {categories.map((_, index) => (
+            <div
+              key={index}
               className={cn(
-                "px-4 py-2 rounded-full text-body-sm font-semibold transition-all min-h-[40px]",
-                activeCategory === index
-                  ? "bg-primary-500 text-white shadow-lg"
-                  : "bg-black/30 text-white/70 backdrop-blur-sm hover:bg-black/40"
+                "w-1.5 h-1.5 rounded-full transition-all",
+                activeCategory === index ? "bg-primary-400 w-3" : "bg-white/30"
               )}
-            >
-              {cat.label}
-            </button>
+            />
           ))}
         </div>
 
-        {/* Active category indicator */}
-        <div className="absolute bottom-24 left-0 right-0 text-center">
-          <p className="text-white/50 text-body-sm font-medium">
-            {currentCat.label}
-          </p>
-        </div>
-
         {/* Shutter button */}
-        <div className="absolute bottom-6 left-0 right-0 flex justify-center">
+        <div className="absolute bottom-5 left-0 right-0 flex justify-center">
           <button
             onClick={handleCapture}
             className="w-[72px] h-[72px] rounded-full bg-white border-4 border-primary-400 shadow-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-400"
@@ -124,6 +139,32 @@ export default function PatientHomePage() {
           >
             <div className="w-[58px] h-[58px] rounded-full bg-white" />
           </button>
+        </div>
+      </div>
+
+      {/* Quick action bar - Instagram-style icons */}
+      <div className="px-4 pb-20 pt-2 bg-navy-900">
+        <div className="flex items-center justify-around">
+          {quickActions.map((action) => (
+            <button
+              key={action.id}
+              onClick={() => handleQuickAction(action.id)}
+              className="flex flex-col items-center gap-1.5 py-2 px-3 min-w-touch min-h-touch rounded-xl transition-colors group"
+              aria-label={action.label}
+            >
+              <div className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center transition-transform group-hover:scale-110 group-active:scale-95",
+                action.color
+              )}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                  <path d={action.icon} />
+                </svg>
+              </div>
+              <span className="text-xs font-medium text-white/60 group-hover:text-white/80">
+                {action.label}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
     </div>

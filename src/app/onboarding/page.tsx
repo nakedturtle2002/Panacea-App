@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/shared/Logo";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
+import PhoneInput from "@/components/ui/PhoneInput";
 import HospitalPicker from "@/components/ui/HospitalPicker";
+import { savePatientProfile, getPatientProfile } from "@/lib/patient-store";
 
 type Step = "personal" | "medical" | "syncing" | "done";
 
@@ -18,10 +20,19 @@ export default function OnboardingPage() {
     lastName: "",
     dateOfBirth: "",
     gender: "male",
+    countryCode: "+84",
     phone: "",
     patientId: "",
     hospitalName: "",
   });
+
+  // Hydrate from stored profile if returning
+  useEffect(() => {
+    const stored = getPatientProfile();
+    if (stored.firstName) {
+      setFormData((prev) => ({ ...prev, ...stored }));
+    }
+  }, []);
 
   const updateField = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -29,12 +40,26 @@ export default function OnboardingPage() {
 
   const handlePersonalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Persist personal info immediately
+    savePatientProfile({
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      dateOfBirth: formData.dateOfBirth,
+      gender: formData.gender,
+      countryCode: formData.countryCode,
+      phone: formData.phone,
+    });
     setStep("medical");
   };
 
   const handleMedicalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.hospitalName) return;
+    // Persist medical info
+    savePatientProfile({
+      patientId: formData.patientId,
+      hospitalName: formData.hospitalName,
+    });
     setStep("syncing");
     setTimeout(() => setStep("done"), 2500);
   };
@@ -152,12 +177,12 @@ export default function OnboardingPage() {
                 { value: "other", label: "Other" },
               ]}
             />
-            <Input
+            <PhoneInput
               label="Phone Number"
-              type="tel"
-              placeholder="+66-XX-XXX-XXXX"
-              value={formData.phone}
-              onChange={(e) => updateField("phone", e.target.value)}
+              countryCode={formData.countryCode}
+              phone={formData.phone}
+              onCountryCodeChange={(code) => updateField("countryCode", code)}
+              onPhoneChange={(phone) => updateField("phone", phone)}
               required
             />
 
