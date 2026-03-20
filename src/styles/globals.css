@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: #FAFAF8;
+    --background: #F8FAFA;
     --surface: #FFFFFF;
-    --border: #E2E8F0;
-    --primary: #2DD4BF;
+    --border: #D1DDE6;
+    --primary: #14B8A6;
     --primary-dark: #0F766E;
     --text-primary: #1E3A5F;
-    --text-secondary: #64748B;
+    --text-secondary: #4A6680;
     --success: #22C55E;
     --warning: #F59E0B;
     --error: #EF4444;
@@ -18,30 +18,29 @@
   }
 
   html {
-    font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply bg-background text-navy-700 font-sans;
+    @apply bg-background text-navy-700 font-sans text-body;
     min-height: 100vh;
   }
 
-  /* Ensure good focus visibility for accessibility */
+  /* Focus visibility for accessibility */
   *:focus-visible {
-    @apply outline-2 outline-offset-2 outline-primary-500 rounded-sm;
+    @apply outline-2 outline-offset-2 outline-primary-600 rounded-sm;
   }
 
-  /* Larger tap targets for older users */
+  /* 48px minimum tap targets */
   button, a, input, select, textarea {
-    min-height: 44px;
+    min-height: 48px;
   }
 }
 
 @layer components {
   .page-container {
-    @apply max-w-lg mx-auto px-4 pb-24 pt-6;
+    @apply max-w-lg mx-auto px-5 pb-28 pt-6;
   }
 
   .section-title {
@@ -49,6 +48,6 @@
   }
 
   .card {
-    @apply bg-surface rounded-2xl border border-border p-4 shadow-sm;
+    @apply bg-surface rounded-2xl border border-border p-5 shadow-sm;
   }
 }

@@ -8,13 +8,13 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<string, string> = {
-  default: "bg-gray-100 text-gray-700",
-  medication: "bg-primary-100 text-primary-700",
-  symptoms: "bg-amber-100 text-amber-700",
+  default: "bg-gray-100 text-navy-700",
+  medication: "bg-primary-100 text-primary-800",
+  symptoms: "bg-amber-100 text-amber-800",
   lifestyle: "bg-blue-100 text-navy-700",
-  success: "bg-green-100 text-green-700",
-  warning: "bg-amber-100 text-amber-700",
-  error: "bg-red-100 text-red-700",
+  success: "bg-green-100 text-green-800",
+  warning: "bg-amber-100 text-amber-800",
+  error: "bg-red-100 text-red-800",
 };
 
 export default function Badge({
@@ -25,7 +25,7 @@ export default function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-3 py-1 text-sm font-medium",
+        "inline-flex items-center rounded-full px-3 py-1 text-body-sm font-semibold",
         variantStyles[variant],
         className
       )}

@@ -12,7 +12,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<string, string> = {
   primary:
-    "bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-white shadow-sm",
+    "bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white shadow-sm",
   secondary:
     "bg-white hover:bg-gray-50 active:bg-gray-100 text-navy-700 border border-border shadow-sm",
   ghost:
@@ -22,9 +22,9 @@ const variantStyles: Record<string, string> = {
 };
 
 const sizeStyles: Record<string, string> = {
-  sm: "px-3 py-2 text-sm min-h-[40px]",
-  md: "px-5 py-3 text-body min-h-touch",
-  lg: "px-6 py-4 text-body-lg min-h-[56px]",
+  sm: "px-4 py-2.5 text-body-sm min-h-[44px]",
+  md: "px-5 py-3.5 text-body min-h-touch",
+  lg: "px-6 py-4 text-body-lg min-h-[56px] font-semibold",
 };
 
 export default function Button({
@@ -39,7 +39,7 @@ export default function Button({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center rounded-xl font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500",
+        "inline-flex items-center justify-center rounded-2xl font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600",
         variantStyles[variant],
         sizeStyles[size],
         fullWidth && "w-full",

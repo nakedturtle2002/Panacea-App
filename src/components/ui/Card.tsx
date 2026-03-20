@@ -18,7 +18,7 @@ export default function Card({
   return (
     <Component
       className={cn(
-        "bg-surface rounded-2xl border border-border p-4 shadow-sm",
+        "bg-surface rounded-2xl border border-border p-5 shadow-sm",
         onClick && "cursor-pointer hover:shadow-md transition-shadow",
         className
       )}

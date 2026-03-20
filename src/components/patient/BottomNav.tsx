@@ -8,17 +8,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   {
     href: "/home",
-    label: "Home",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        <polyline points="9 22 9 12 15 12 15 22" />
-      </svg>
-    ),
-  },
-  {
-    href: "/capture",
-    label: "Capture",
+    label: "Camera",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
@@ -59,14 +49,20 @@ const navItems = [
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const isHome = pathname === "/home";
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-border z-50"
+      className={cn(
+        "fixed bottom-0 left-0 right-0 z-50 border-t",
+        isHome
+          ? "bg-navy-900 border-navy-800"
+          : "bg-white border-border"
+      )}
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className="max-w-lg mx-auto flex items-center justify-around px-2 py-1">
+      <div className="max-w-lg mx-auto flex items-center justify-around px-2 py-1.5">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -74,15 +70,15 @@ export default function BottomNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center gap-0.5 py-2 px-3 min-w-touch min-h-touch rounded-lg transition-colors",
+                "flex flex-col items-center justify-center gap-0.5 py-2 px-4 min-w-touch min-h-touch rounded-xl transition-colors",
                 isActive
-                  ? "text-primary-600"
-                  : "text-gray-400 hover:text-navy-700"
+                  ? isHome ? "text-primary-400" : "text-primary-600"
+                  : isHome ? "text-white/50 hover:text-white/70" : "text-gray-400 hover:text-navy-700"
               )}
               aria-current={isActive ? "page" : undefined}
             >
               {item.icon}
-              <span className="text-xs font-medium">{item.label}</span>
+              <span className="text-xs font-semibold">{item.label}</span>
             </Link>
           );
         })}
