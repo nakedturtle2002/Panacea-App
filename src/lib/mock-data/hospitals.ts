@@ -1,0 +1,17 @@
+export const mockHospitals = [
+  "Bangkok General Hospital",
+  "Bangkok Hospital",
+  "Bumrungrad International Hospital",
+  "Chulalongkorn Hospital",
+  "King Chulalongkorn Memorial Hospital",
+  "Mahidol University Hospital",
+  "Phramongkutklao Hospital",
+  "Ramathibodi Hospital",
+  "Samitivej Hospital",
+  "Siriraj Hospital",
+  "St. Louis Hospital",
+  "Thonburi Hospital",
+  "Vejthani Hospital",
+  "Vibhavadi Hospital",
+  "Yanhee International Hospital",
+] as const;
