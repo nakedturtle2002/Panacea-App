@@ -61,7 +61,7 @@ export default function PhoneInput({
   return (
     <div className="flex flex-col gap-2">
       {label && (
-        <label className="text-body font-semibold text-navy-700">{label}</label>
+        <label className="text-body font-semibold text-deep-800">{label}</label>
       )}
       <div ref={wrapperRef} className="relative flex gap-2">
         {/* Country code selector */}
@@ -69,7 +69,7 @@ export default function PhoneInput({
           type="button"
           onClick={() => setDropdownOpen(!dropdownOpen)}
           className={cn(
-            "flex items-center gap-1.5 px-3 py-3.5 rounded-2xl border border-border bg-white text-body text-navy-700 min-h-touch whitespace-nowrap",
+            "flex items-center gap-1.5 px-3 py-3.5 rounded-2xl border border-white/40 bg-white/80 backdrop-blur-sm text-body text-deep-800 min-h-touch whitespace-nowrap",
             "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent",
             "hover:bg-gray-50 transition-colors"
           )}
@@ -91,7 +91,7 @@ export default function PhoneInput({
           placeholder="Phone number"
           required={required}
           className={cn(
-            "flex-1 rounded-2xl border border-border bg-white px-4 py-3.5 text-body text-navy-700 placeholder:text-gray-400 min-h-touch",
+            "flex-1 rounded-2xl border border-border bg-white px-4 py-3.5 text-body text-deep-800 placeholder:text-gray-400 min-h-touch",
             "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent",
             error && "border-red-400 focus:ring-red-400"
           )}
@@ -100,7 +100,7 @@ export default function PhoneInput({
         {/* Dropdown */}
         {dropdownOpen && (
           <ul
-            className="absolute top-full left-0 z-30 mt-1 w-72 max-h-64 overflow-y-auto rounded-2xl border border-border bg-white shadow-xl"
+            className="absolute top-full left-0 z-30 mt-1 w-72 max-h-64 overflow-y-auto rounded-2xl border border-white/40 bg-white/95 backdrop-blur-md shadow-glow-lg"
             role="listbox"
           >
             {COUNTRY_CODES.map((country) => (
@@ -112,7 +112,7 @@ export default function PhoneInput({
                     setDropdownOpen(false);
                   }}
                   className={cn(
-                    "w-full flex items-center gap-3 px-4 py-3 text-body text-navy-700 hover:bg-primary-50 transition-colors min-h-touch border-b border-gray-100 last:border-b-0",
+                    "w-full flex items-center gap-3 px-4 py-3 text-body text-deep-800 hover:bg-primary-50 transition-colors min-h-touch border-b border-gray-100 last:border-b-0",
                     country.code === countryCode && "bg-primary-50 font-semibold"
                   )}
                   role="option"

@@ -24,7 +24,7 @@ export default function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="text-body font-semibold text-navy-700"
+          className="text-body font-semibold text-deep-800"
         >
           {label}
         </label>
@@ -32,7 +32,7 @@ export default function Input({
       <input
         id={inputId}
         className={cn(
-          "w-full rounded-2xl border border-border bg-white px-4 py-3.5 text-body text-navy-700 placeholder:text-gray-400 min-h-touch",
+          "w-full rounded-2xl border border-white/40 bg-white/80 backdrop-blur-sm px-4 py-3.5 text-body text-deep-800 placeholder:text-deep-300 min-h-touch",
           "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent",
           error && "border-red-400 focus:ring-red-400",
           className
@@ -49,7 +49,7 @@ export default function Input({
         </p>
       )}
       {helperText && !error && (
-        <p id={`${inputId}-helper`} className="text-body-sm text-gray-500">
+        <p id={`${inputId}-helper`} className="text-body-sm text-deep-400">
           {helperText}
         </p>
       )}

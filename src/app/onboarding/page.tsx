@@ -26,7 +26,6 @@ export default function OnboardingPage() {
     hospitalName: "",
   });
 
-  // Hydrate from stored profile if returning
   useEffect(() => {
     const stored = getPatientProfile();
     if (stored.firstName) {
@@ -40,7 +39,6 @@ export default function OnboardingPage() {
 
   const handlePersonalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Persist personal info immediately
     savePatientProfile({
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -55,7 +53,6 @@ export default function OnboardingPage() {
   const handleMedicalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.hospitalName) return;
-    // Persist medical info
     savePatientProfile({
       patientId: formData.patientId,
       hospitalName: formData.hospitalName,
@@ -66,15 +63,15 @@ export default function OnboardingPage() {
 
   if (step === "syncing") {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
+      <div className="min-h-screen bg-gradient-hero flex flex-col items-center justify-center px-6">
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-primary-100 flex items-center justify-center animate-pulse">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary-600">
+          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary-200 to-primary-400 flex items-center justify-center animate-pulse shadow-glow">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white">
               <path d="M21 12a9 9 0 1 1-6.219-8.56" strokeLinecap="round" />
             </svg>
           </div>
-          <h2 className="text-heading-2 text-navy-700 mb-2">Syncing your records...</h2>
-          <p className="text-body text-gray-500">
+          <h2 className="text-heading-2 text-deep-800 mb-2">Syncing your records...</h2>
+          <p className="text-body text-deep-400">
             Connecting to {formData.hospitalName || "your hospital"}
           </p>
         </div>
@@ -84,41 +81,41 @@ export default function OnboardingPage() {
 
   if (step === "done") {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
+      <div className="min-h-screen bg-gradient-hero flex flex-col items-center justify-center px-6">
         <div className="text-center max-w-sm">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-green-600">
+          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-300 to-green-500 flex items-center justify-center shadow-glow">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white">
               <path d="M20 6 9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <h2 className="text-heading-2 text-navy-700 mb-2">All set!</h2>
-          <p className="text-body text-gray-500 mb-2">
+          <h2 className="text-heading-2 text-deep-800 mb-2">All set!</h2>
+          <p className="text-body text-deep-400 mb-2">
             Your medical records have been synced successfully.
           </p>
-          <div className="card my-6 text-left">
-            <div className="space-y-2">
+          <div className="card-glass my-6 text-left">
+            <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-gray-500">Hospital</span>
-                <span className="font-medium text-navy-700">{formData.hospitalName}</span>
+                <span className="text-deep-400">Hospital</span>
+                <span className="font-medium text-deep-800">{formData.hospitalName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Diagnosis</span>
-                <span className="font-medium text-navy-700">Type 2 Diabetes</span>
+                <span className="text-deep-400">Diagnosis</span>
+                <span className="font-medium text-deep-800">Type 2 Diabetes</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Prescriptions</span>
-                <span className="font-medium text-navy-700">3 medications</span>
+                <span className="text-deep-400">Prescriptions</span>
+                <span className="font-medium text-deep-800">3 medications</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Next visit</span>
-                <span className="font-medium text-navy-700">Apr 15, 2024</span>
+                <span className="text-deep-400">Next visit</span>
+                <span className="font-medium text-deep-800">Apr 15, 2024</span>
               </div>
             </div>
           </div>
           <Button fullWidth size="lg" onClick={() => router.push("/home")}>
             Start Logging
           </Button>
-          <p className="text-xs text-gray-400 mt-3">
+          <p className="text-xs text-deep-300 mt-3">
             You can review your full profile anytime from the Profile tab
           </p>
         </div>
@@ -127,21 +124,21 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-main">
       <div className="page-container max-w-md mx-auto">
-        <Logo size="sm" className="mb-8" />
+        <Logo size="sm" variant="icon" className="mb-8" />
 
-        {/* Progress indicator */}
+        {/* Progress */}
         <div className="flex gap-2 mb-8">
-          <div className={`h-1.5 flex-1 rounded-full ${step === "personal" || step === "medical" ? "bg-primary-500" : "bg-gray-200"}`} />
-          <div className={`h-1.5 flex-1 rounded-full ${step === "medical" ? "bg-primary-500" : "bg-gray-200"}`} />
+          <div className={`h-1.5 flex-1 rounded-full transition-all ${step === "personal" || step === "medical" ? "bg-gradient-to-r from-primary-400 to-primary-500" : "bg-deep-100"}`} />
+          <div className={`h-1.5 flex-1 rounded-full transition-all ${step === "medical" ? "bg-gradient-to-r from-primary-400 to-primary-500" : "bg-deep-100"}`} />
         </div>
 
         {step === "personal" && (
           <form onSubmit={handlePersonalSubmit} className="space-y-5">
             <div>
-              <h1 className="text-heading-1 text-navy-700 mb-1">Welcome to Panacea</h1>
-              <p className="text-body text-gray-500">
+              <h1 className="text-heading-1 text-deep-800 mb-1">Welcome to Panacea</h1>
+              <p className="text-body text-deep-400">
                 Let us start with your personal information
               </p>
             </div>
@@ -195,8 +192,8 @@ export default function OnboardingPage() {
         {step === "medical" && (
           <form onSubmit={handleMedicalSubmit} className="space-y-5">
             <div>
-              <h1 className="text-heading-1 text-navy-700 mb-1">Medical Profile</h1>
-              <p className="text-body text-gray-500">
+              <h1 className="text-heading-1 text-deep-800 mb-1">Medical Profile</h1>
+              <p className="text-body text-deep-400">
                 Enter your patient ID from your medical booklet
               </p>
             </div>
@@ -217,7 +214,7 @@ export default function OnboardingPage() {
               required
             />
 
-            <div className="bg-primary-50 rounded-xl p-4 border border-primary-200">
+            <div className="bg-gradient-to-r from-primary-50 to-pastel-cyan rounded-xl p-4 border border-primary-200/50">
               <p className="text-body text-primary-800">
                 We will connect to your hospital records to sync your diagnosis,
                 prescriptions, and follow-up schedule.

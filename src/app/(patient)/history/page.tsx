@@ -41,8 +41,21 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="page-container">
-      <h1 className="text-heading-1 text-navy-700 mb-2">History</h1>
+    <div className="min-h-screen bg-gradient-main">
+      <div className="page-container">
+      {/* Back button */}
+      <div className="flex items-center gap-3 mb-4">
+        <button
+          onClick={() => window.history.back()}
+          className="p-2 rounded-xl hover:bg-white/60 min-w-[48px] min-h-[48px] flex items-center justify-center transition-colors"
+          aria-label="Back"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-deep-700">
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+        </button>
+        <h1 className="text-heading-1 text-deep-800">History</h1>
+      </div>
 
       {/* Summary */}
       <div className="flex gap-6 mb-5">
@@ -50,19 +63,19 @@ export default function HistoryPage() {
           <span className="text-heading-2 font-bold text-primary-600">
             {mockHealthEntries.filter((e) => e.category === "medication").length}
           </span>
-          <span className="text-body-sm text-gray-500 ml-1">Meds</span>
+          <span className="text-body-sm text-deep-400 ml-1">Meds</span>
         </div>
         <div>
           <span className="text-heading-2 font-bold text-amber-500">
             {mockHealthEntries.filter((e) => e.category === "symptoms").length}
           </span>
-          <span className="text-body-sm text-gray-500 ml-1">Symptoms</span>
+          <span className="text-body-sm text-deep-400 ml-1">Symptoms</span>
         </div>
         <div>
           <span className="text-heading-2 font-bold text-blue-500">
             {mockHealthEntries.filter((e) => e.category === "lifestyle").length}
           </span>
-          <span className="text-body-sm text-gray-500 ml-1">Lifestyle</span>
+          <span className="text-body-sm text-deep-400 ml-1">Lifestyle</span>
         </div>
       </div>
 
@@ -75,8 +88,8 @@ export default function HistoryPage() {
             className={cn(
               "px-5 py-2.5 rounded-full text-body-sm font-semibold whitespace-nowrap transition-all min-h-[44px]",
               activeFilter === chip.id
-                ? "bg-primary-600 text-white shadow-sm"
-                : "bg-gray-100 text-navy-700 hover:bg-gray-200"
+                ? "bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-glow"
+                : "bg-white/60 backdrop-blur-sm text-deep-700 border border-white/40 hover:bg-white/80"
             )}
           >
             {chip.label}
@@ -93,7 +106,7 @@ export default function HistoryPage() {
         <div className="space-y-8">
           {groupedEntries.map(([dateStr, entries]) => (
             <div key={dateStr}>
-              <h3 className="text-body font-bold text-navy-700 mb-3">
+              <h3 className="text-body font-bold text-deep-800 mb-3">
                 {formatDate(dateStr)}
               </h3>
 
@@ -148,7 +161,7 @@ export default function HistoryPage() {
                 .map((entry) => (
                   <div
                     key={entry.id}
-                    className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-border mb-2"
+                    className="flex items-center gap-4 p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-white/40 shadow-soft mb-2"
                   >
                     <div className={cn(
                       "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0",
@@ -196,6 +209,7 @@ export default function HistoryPage() {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

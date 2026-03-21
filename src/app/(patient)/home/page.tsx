@@ -2,21 +2,16 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { mockNotifications } from "@/lib/mock-data/notifications";
+import Image from "next/image";
+import { mockHealthEntries } from "@/lib/mock-data/health-entries";
 import { EntryCategory } from "@/types/patient";
 import { cn } from "@/lib/utils";
+import { getRelativeDate } from "@/lib/utils";
 
-const categories: { id: EntryCategory; label: string; icon: string }[] = [
-  { id: "medication", label: "Medication", icon: "M9 3h6v2H9zM12 8v6M9 11h6M5 7h14a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2z" },
-  { id: "symptoms", label: "Symptoms", icon: "M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
-  { id: "lifestyle", label: "Lifestyle", icon: "M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" },
-];
-
-const quickActions = [
-  { id: "bp", label: "Blood Pressure", icon: "M22 12h-4l-3 9L9 3l-3 9H2", color: "bg-red-500" },
-  { id: "glucose", label: "Glucose", icon: "M12 2v6m0 12v2M4.93 4.93l4.24 4.24m5.66 5.66l4.24 4.24M2 12h6m12 0h2M4.93 19.07l4.24-4.24m5.66-5.66l4.24-4.24", color: "bg-blue-500" },
-  { id: "symptoms", label: "Symptoms", icon: "M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM14 2v6h6M16 13H8M16 17H8M10 9H8", color: "bg-amber-500" },
-  { id: "notes", label: "Notes", icon: "M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z", color: "bg-primary-500" },
+const categories: { id: EntryCategory; label: string; emoji: string }[] = [
+  { id: "medication", label: "Medication", emoji: "💊" },
+  { id: "symptoms", label: "Symptoms", emoji: "🩺" },
+  { id: "lifestyle", label: "Lifestyle", emoji: "🥗" },
 ];
 
 export default function PatientHomePage() {
@@ -24,17 +19,12 @@ export default function PatientHomePage() {
   const [activeCategory, setActiveCategory] = useState<number>(0);
 
   const currentCat = categories[activeCategory];
-  const unreadCount = mockNotifications.filter((n) => !n.read).length;
 
   const handleCapture = () => {
     router.push(`/capture?category=${currentCat.id}&captured=true`);
   };
 
-  const handleQuickAction = (actionId: string) => {
-    router.push(`/capture?action=${actionId}`);
-  };
-
-  // Swipe handling
+  // Swipe handling for categories
   const touchStartX = useRef(0);
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -50,121 +40,163 @@ export default function PatientHomePage() {
     }
   };
 
+  // Recent entries for gallery preview
+  const recentEntries = mockHealthEntries.slice(0, 4);
+
   return (
-    <div className="flex flex-col h-[100dvh] bg-navy-900">
-      {/* Top bar - notification only */}
-      <div className="flex items-center justify-end px-5 py-3 bg-navy-900">
+    <div className="flex flex-col h-[100dvh] bg-gradient-dark">
+      {/* Top bar: Profile (left) + Chat (right) */}
+      <div className="flex items-center justify-between px-5 py-3">
         <button
-          onClick={() => router.push("/notifications")}
-          className="relative p-2 rounded-xl min-w-touch min-h-touch flex items-center justify-center"
-          aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
+          onClick={() => router.push("/profile")}
+          className="w-11 h-11 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors"
+          aria-label="Profile"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/80">
-            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/80">
+            <circle cx="12" cy="8" r="5" />
+            <path d="M20 21a8 8 0 0 0-16 0" />
           </svg>
-          {unreadCount > 0 && (
-            <span className="absolute top-1 right-1 w-5 h-5 bg-primary-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
-              {unreadCount}
-            </span>
-          )}
+        </button>
+
+        {/* Center logo icon */}
+        <div className="opacity-60">
+          <Image src="/panacea-icon.svg" alt="Panacea" width={28} height={28} className="object-contain brightness-200" />
+        </div>
+
+        <button
+          onClick={() => router.push("/chat")}
+          className="w-11 h-11 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors"
+          aria-label="Chat"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/80">
+            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+          </svg>
         </button>
       </div>
 
-      {/* Camera viewfinder */}
+      {/* Category filter bar */}
+      <div className="px-5 pb-3">
+        <div
+          className="flex items-center justify-center gap-1 bg-white/8 backdrop-blur-sm rounded-full px-1.5 py-1.5"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {categories.map((cat, index) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(index)}
+              className={cn(
+                "flex items-center gap-2 px-5 py-2.5 rounded-full text-body-sm font-semibold transition-all duration-200",
+                activeCategory === index
+                  ? "bg-gradient-to-r from-primary-500 to-primary-400 text-white shadow-glow"
+                  : "text-white/60 hover:text-white/80 hover:bg-white/5"
+              )}
+            >
+              <span>{cat.emoji}</span>
+              <span>{cat.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Camera viewfinder - dominant center */}
       <div
-        className="flex-1 relative mx-3 mb-2 rounded-3xl overflow-hidden bg-navy-800"
+        className="flex-1 relative mx-4 rounded-3xl overflow-hidden bg-deep-800/50 backdrop-blur-sm border border-white/5"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
         {/* Simulated camera view */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          {/* Camera grid lines (subtle) */}
-          <div className="absolute inset-0 pointer-events-none">
+          {/* Subtle grid */}
+          <div className="absolute inset-0 pointer-events-none opacity-30">
             <div className="absolute left-1/3 top-0 bottom-0 w-px bg-white/10" />
             <div className="absolute right-1/3 top-0 bottom-0 w-px bg-white/10" />
             <div className="absolute top-1/3 left-0 right-0 h-px bg-white/10" />
             <div className="absolute bottom-1/3 left-0 right-0 h-px bg-white/10" />
           </div>
 
-          {/* Center camera icon */}
-          <div className="flex flex-col items-center gap-3 opacity-40">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+          {/* Center icon */}
+          <div className="flex flex-col items-center gap-3 opacity-30">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-white">
               <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
               <circle cx="12" cy="13" r="3" />
             </svg>
-            <p className="text-white/60 text-body">Camera preview</p>
+            <p className="text-white/40 text-body-sm">Camera preview</p>
           </div>
         </div>
 
-        {/* Instagram-style category filter bar */}
-        <div className="absolute bottom-28 left-0 right-0 flex justify-center">
-          <div className="flex items-center gap-1 bg-black/20 backdrop-blur-md rounded-full px-2 py-1.5">
-            {categories.map((cat, index) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(index)}
-                className={cn(
-                  "px-5 py-2 rounded-full text-body-sm font-semibold transition-all min-h-[40px]",
-                  activeCategory === index
-                    ? "bg-primary-500 text-white shadow-lg"
-                    : "text-white/70 hover:text-white"
-                )}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Swipe hint dots */}
-        <div className="absolute bottom-20 left-0 right-0 flex justify-center gap-1.5">
+        {/* Category indicator dots */}
+        <div className="absolute bottom-24 left-0 right-0 flex justify-center gap-1.5">
           {categories.map((_, index) => (
             <div
               key={index}
               className={cn(
-                "w-1.5 h-1.5 rounded-full transition-all",
-                activeCategory === index ? "bg-primary-400 w-3" : "bg-white/30"
+                "h-1.5 rounded-full transition-all duration-300",
+                activeCategory === index
+                  ? "w-6 bg-gradient-to-r from-primary-400 to-primary-300"
+                  : "w-1.5 bg-white/20"
               )}
             />
           ))}
         </div>
 
-        {/* Shutter button */}
-        <div className="absolute bottom-5 left-0 right-0 flex justify-center">
+        {/* Shutter button - large, centered, dominant */}
+        <div className="absolute bottom-6 left-0 right-0 flex justify-center">
           <button
             onClick={handleCapture}
-            className="w-[72px] h-[72px] rounded-full bg-white border-4 border-primary-400 shadow-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-400"
+            className="w-[72px] h-[72px] rounded-full flex items-center justify-center transition-transform hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-400"
             aria-label={`Take photo for ${currentCat.label}`}
+            style={{
+              background: "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(224,247,245,0.95) 100%)",
+              boxShadow: "0 0 24px rgba(20, 184, 166, 0.4), 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8)",
+            }}
           >
-            <div className="w-[58px] h-[58px] rounded-full bg-white" />
+            <div
+              className="w-[58px] h-[58px] rounded-full"
+              style={{
+                background: "linear-gradient(135deg, #FFFFFF 0%, #E0F7F5 100%)",
+                boxShadow: "inset 0 2px 4px rgba(20, 184, 166, 0.15)",
+              }}
+            />
           </button>
         </div>
       </div>
 
-      {/* Quick action bar - Instagram-style icons */}
-      <div className="px-4 pb-20 pt-2 bg-navy-900">
-        <div className="flex items-center justify-around">
-          {quickActions.map((action) => (
+      {/* History gallery preview */}
+      <div className="px-4 pt-3 pb-6">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-body-sm font-medium text-white/50">Recent</p>
+          <button
+            onClick={() => router.push("/history")}
+            className="text-body-sm text-primary-400 font-medium px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
+          >
+            View all
+          </button>
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          {recentEntries.map((entry) => (
             <button
-              key={action.id}
-              onClick={() => handleQuickAction(action.id)}
-              className="flex flex-col items-center gap-1.5 py-2 px-3 min-w-touch min-h-touch rounded-xl transition-colors group"
-              aria-label={action.label}
+              key={entry.id}
+              onClick={() => router.push("/history")}
+              className="flex-shrink-0 w-16 h-16 rounded-xl bg-deep-700/80 border border-white/10 flex flex-col items-center justify-center gap-0.5 hover:border-primary-500/40 transition-colors"
             >
-              <div className={cn(
-                "w-10 h-10 rounded-full flex items-center justify-center transition-transform group-hover:scale-110 group-active:scale-95",
-                action.color
-              )}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                  <path d={action.icon} />
-                </svg>
-              </div>
-              <span className="text-xs font-medium text-white/60 group-hover:text-white/80">
-                {action.label}
+              <span className="text-lg">
+                {entry.category === "medication" ? "💊" : entry.category === "symptoms" ? "🩺" : "🥗"}
+              </span>
+              <span className="text-[10px] text-white/40 leading-tight">
+                {getRelativeDate(entry.date)}
               </span>
             </button>
           ))}
+          {/* Add placeholder for "more" */}
+          <button
+            onClick={() => router.push("/history")}
+            className="flex-shrink-0 w-16 h-16 rounded-xl bg-white/5 border border-dashed border-white/10 flex items-center justify-center hover:border-primary-500/30 transition-colors"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/30">
+              <path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>

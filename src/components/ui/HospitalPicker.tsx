@@ -102,7 +102,7 @@ export default function HospitalPicker({
   return (
     <div ref={wrapperRef} className="relative flex flex-col gap-1.5">
       {label && (
-        <label className="text-body font-semibold text-navy-700">{label}</label>
+        <label className="text-body font-semibold text-deep-800">{label}</label>
       )}
       <div className="relative">
         <input
@@ -124,7 +124,7 @@ export default function HospitalPicker({
           placeholder="Search hospitals..."
           required={required}
           className={cn(
-            "w-full rounded-2xl border border-border bg-white px-4 py-3.5 text-body text-navy-700 placeholder:text-gray-400 min-h-touch",
+            "w-full rounded-2xl border border-white/40 bg-white/80 backdrop-blur-sm px-4 py-3.5 text-body text-deep-800 placeholder:text-gray-400 min-h-touch",
             "focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent",
             value && "border-primary-300 bg-primary-50/50"
           )}
@@ -153,7 +153,7 @@ export default function HospitalPicker({
       {isOpen && (
         <ul
           id="hospital-listbox"
-          className="absolute top-full left-0 right-0 z-20 mt-1 max-h-72 overflow-y-auto rounded-2xl border border-border bg-white shadow-xl"
+          className="absolute top-full left-0 right-0 z-20 mt-1 max-h-72 overflow-y-auto rounded-2xl border border-white/40 bg-white/80 backdrop-blur-sm shadow-xl"
           role="listbox"
         >
           {grouped.map((group) => (
@@ -173,7 +173,7 @@ export default function HospitalPicker({
                         type="button"
                         onClick={() => selectHospital(hospital.name)}
                         className={cn(
-                          "w-full text-left px-4 py-3 text-body text-navy-700 hover:bg-primary-50 transition-colors min-h-touch border-b border-gray-50 last:border-b-0",
+                          "w-full text-left px-4 py-3 text-body text-deep-800 hover:bg-primary-50 transition-colors min-h-touch border-b border-gray-50 last:border-b-0",
                           flatIdx === highlightIndex && "bg-primary-50",
                           hospital.name === value && "bg-primary-100 font-semibold"
                         )}

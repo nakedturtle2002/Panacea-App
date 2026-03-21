@@ -12,13 +12,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<string, string> = {
   primary:
-    "bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white shadow-sm",
+    "bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 active:from-primary-700 active:to-primary-800 text-white shadow-glow",
   secondary:
-    "bg-white hover:bg-gray-50 active:bg-gray-100 text-navy-700 border border-border shadow-sm",
+    "bg-white/80 backdrop-blur-sm hover:bg-white active:bg-gray-50 text-deep-700 border border-white/50 shadow-soft",
   ghost:
-    "bg-transparent hover:bg-gray-100 active:bg-gray-200 text-navy-700",
+    "bg-transparent hover:bg-white/60 active:bg-white/80 text-deep-700",
   danger:
-    "bg-red-500 hover:bg-red-600 active:bg-red-700 text-white shadow-sm",
+    "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-sm",
 };
 
 const sizeStyles: Record<string, string> = {
@@ -39,7 +39,7 @@ export default function Button({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center rounded-2xl font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600",
+        "inline-flex items-center justify-center rounded-2xl font-medium transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500",
         variantStyles[variant],
         sizeStyles[size],
         fullWidth && "w-full",
