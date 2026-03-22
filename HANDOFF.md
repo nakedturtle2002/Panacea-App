@@ -4,8 +4,8 @@
 feature/ui-visual-redesign-v3
 
 ## Goal
-Keep the existing app exactly as the current base.
-Do not rewrite the project.
+Keep the existing app as it is.
+Do not rewrite the app.
 Do not refactor the major structure.
 Only fix small visual issues.
 
