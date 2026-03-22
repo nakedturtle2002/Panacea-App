@@ -9,8 +9,8 @@ export interface MockDoctor {
 
 export const mockTreatingDoctor: MockDoctor = {
   id: "d1",
-  firstName: "Dr. Piyawan",
-  lastName: "Srisuk",
+  firstName: "Dr. Nguyen Tien",
+  lastName: "Thanh",
   specialty: "Endocrinology",
   hospitalName: "Bangkok General Hospital",
   phone: "+66-2-310-3000",

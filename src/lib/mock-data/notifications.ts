@@ -8,7 +8,7 @@ export const mockNotifications: Notification[] = [
     title: "Time for your morning meds!",
     message: "You have been on a 3-day streak. Take a photo of your medication to keep it going!",
     read: false,
-    createdAt: "2024-03-14T07:00:00Z",
+    createdAt: "2026-03-14T07:00:00Z",
   },
   {
     id: "n2",
@@ -17,7 +17,7 @@ export const mockNotifications: Notification[] = [
     title: "Follow-up visit coming up",
     message: "Your appointment at Bangkok General Hospital is in 4 weeks (April 15). Mark your calendar!",
     read: false,
-    createdAt: "2024-03-14T09:00:00Z",
+    createdAt: "2026-03-14T09:00:00Z",
   },
   {
     id: "n3",
@@ -26,7 +26,7 @@ export const mockNotifications: Notification[] = [
     title: "Heads up about dessert",
     message: "We noticed you logged a dessert photo yesterday. Are you checking your glucose after sweet treats? Just a friendly nudge!",
     read: true,
-    createdAt: "2024-03-13T20:30:00Z",
+    createdAt: "2026-03-13T20:30:00Z",
   },
   {
     id: "n4",
@@ -35,7 +35,7 @@ export const mockNotifications: Notification[] = [
     title: "3-day medication streak!",
     message: "You have logged your medication 3 days in a row. Awesome work - keep the momentum going!",
     read: true,
-    createdAt: "2024-03-13T08:30:00Z",
+    createdAt: "2026-03-13T08:30:00Z",
   },
   {
     id: "n5",
@@ -44,6 +44,6 @@ export const mockNotifications: Notification[] = [
     title: "Evening meds reminder",
     message: "Do not forget your evening Metformin. Take it with dinner for best results.",
     read: true,
-    createdAt: "2024-03-12T18:00:00Z",
+    createdAt: "2026-03-12T18:00:00Z",
   },
 ];

@@ -14,8 +14,8 @@ const onboardingSlides = [
         <circle cx="12" cy="13" r="3" />
       </svg>
     ),
-    title: "Record your health, day by day",
-    description: "Snap a photo of your medication, meals, or symptoms. Panacea makes it easy to keep a visual health diary without extra effort.",
+    title: "Capture daily health with ease",
+    description: "Snap meals, medication, or symptoms in seconds, and build a simple visual record of the moments that shape your health every day.",
   },
   {
     icon: (
@@ -23,8 +23,8 @@ const onboardingSlides = [
         <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
       </svg>
     ),
-    title: "Track what matters between visits",
-    description: "Monitor symptoms, medication, and lifestyle changes so you and your doctor always have the full picture.",
+    title: "Get clarity when it matters",
+    description: "From symptoms to daily routines, Panacea AI offers instant, thoughtful guidance whenever something feels uncertain.",
   },
   {
     icon: (
@@ -32,8 +32,8 @@ const onboardingSlides = [
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
       </svg>
     ),
-    title: "Continuous, personal care",
-    description: "Health management does not stop at the clinic door. Panacea bridges the gap so every day counts toward feeling better.",
+    title: "Stay ahead of what matters",
+    description: "Follow changes over time and receive early alerts when your condition may need closer attention, so you can act with confidence.",
   },
 ];
 
@@ -77,7 +77,10 @@ export default function LandingPage() {
 
         {/* Slide content */}
         <div className="flex-1 flex flex-col items-center justify-center px-8">
-          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary-100 to-pastel-cyan flex items-center justify-center mb-8 shadow-glow">
+          <div
+            className="w-24 h-24 rounded-3xl bg-gradient-to-br from-white to-primary-50 flex items-center justify-center mb-8"
+            style={{ boxShadow: "0 0 0 10px rgba(255,255,255,0.8), 0 0 50px rgba(56,192,200,0.4), 0 6px 20px rgba(0,0,0,0.08)" }}
+          >
             {slide.icon}
           </div>
           <h2 className="text-heading-1 text-deep-800 text-center mb-4 max-w-sm">
@@ -117,22 +120,26 @@ export default function LandingPage() {
     <div className="min-h-screen bg-gradient-hero flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-sm flex flex-col items-center gap-10">
         {/* Logo */}
-        <div className="flex flex-col items-center gap-2">
-          <div className="glow-soft rounded-full p-2">
-            <Image
-              src="/panacea-logo.svg"
-              alt="Panacea"
-              width={160}
-              height={192}
-              priority
-              className="object-contain"
-            />
-          </div>
+        <div className="flex flex-col items-center gap-3">
+          <Image
+            src="/panacea-icon.png"
+            alt="Panacea"
+            width={140}
+            height={140}
+            priority
+            className="object-contain"
+          />
+          <span
+            className="font-medium leading-none text-primary-500"
+            style={{ fontSize: "2.6rem" }}
+          >
+            panacea
+          </span>
         </div>
 
         {/* Tagline */}
         <p className="text-body-lg text-deep-400 text-center max-w-xs leading-relaxed">
-          Continuous care, between visits
+          One tap closes the care gap.
         </p>
 
         {/* CTA */}
@@ -158,7 +165,7 @@ export default function LandingPage() {
 
         {/* Trust note */}
         <p className="text-body-sm text-deep-300 text-center max-w-xs leading-relaxed">
-          Simple health logging that helps you and your doctor stay connected between clinic visits.
+          Simple health logging for continuous care between visits.
         </p>
       </div>
     </div>

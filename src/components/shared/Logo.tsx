@@ -18,7 +18,7 @@ const sizeConfig = {
 
 export default function Logo({ size = "md", variant = "full", className }: LogoProps) {
   const config = sizeConfig[size];
-  const src = variant === "full" ? "/panacea-logo.svg" : "/panacea-icon.svg";
+  const src = variant === "full" ? "/panacea-logo.png" : "/panacea-icon.png";
   const w = variant === "full" ? config.fullWidth : config.width;
   const h = variant === "full" ? config.fullHeight : config.height;
 

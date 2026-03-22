@@ -16,12 +16,23 @@ import { cn } from "@/lib/utils";
 export default function ProfilePage() {
   const router = useRouter();
   const [profile, setProfile] = useState<PatientProfile | null>(null);
+  const [additionalHospitals, setAdditionalHospitals] = useState<string[]>([]);
+  const [showAddHospital, setShowAddHospital] = useState(false);
+  const [newHospitalInput, setNewHospitalInput] = useState("");
 
   useEffect(() => {
     if (hasPatientProfile()) {
       setProfile(getPatientProfile());
     }
   }, []);
+
+  const handleAddHospital = () => {
+    const name = newHospitalInput.trim();
+    if (!name) return;
+    setAdditionalHospitals((prev) => [...prev, name]);
+    setNewHospitalInput("");
+    setShowAddHospital(false);
+  };
 
   const firstName = profile?.firstName || mockPatient.firstName;
   const lastName = profile?.lastName || mockPatient.lastName;
@@ -112,20 +123,81 @@ export default function ProfilePage() {
         {/* My Hospital */}
         <section className="mb-8">
           <h3 className="text-heading-2 text-deep-800 mb-4">My Hospital</h3>
-          <Card className="border-primary-200/30 bg-gradient-card">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary-600">
-                  <path d="M3 21h18" /><path d="M5 21V7l8-4v18" /><path d="M19 21V11l-6-4" />
+          <div className="space-y-3">
+            {/* Primary hospital */}
+            <Card className="border-primary-200/30 bg-gradient-card">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary-600">
+                    <path d="M3 21h18" /><path d="M5 21V7l8-4v18" /><path d="M19 21V11l-6-4" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-body font-semibold text-deep-800">{hospitalName}</p>
+                  <p className="text-body-sm text-deep-400">{mockMedicalRecord.diagnosis}</p>
+                  <Badge variant="success" className="mt-2">Active</Badge>
+                </div>
+              </div>
+            </Card>
+
+            {/* Additional hospitals */}
+            {additionalHospitals.map((name, i) => (
+              <Card key={i} className="border-deep-100/50">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-deep-50 to-deep-100 flex items-center justify-center flex-shrink-0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-deep-400">
+                      <path d="M3 21h18" /><path d="M5 21V7l8-4v18" /><path d="M19 21V11l-6-4" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-body font-semibold text-deep-800">{name}</p>
+                    <Badge variant="default" className="mt-2">Added</Badge>
+                  </div>
+                </div>
+              </Card>
+            ))}
+
+            {/* Add hospital inline form */}
+            {showAddHospital ? (
+              <Card className="border-primary-200/40">
+                <p className="text-body-sm font-semibold text-deep-600 mb-3">Add hospital record</p>
+                <input
+                  type="text"
+                  placeholder="Enter hospital name"
+                  value={newHospitalInput}
+                  onChange={(e) => setNewHospitalInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleAddHospital()}
+                  className="w-full px-4 py-3 rounded-xl border border-deep-100 bg-white/80 text-body text-deep-800 placeholder:text-deep-300 focus:outline-none focus:ring-2 focus:ring-primary-400/50 mb-3"
+                  autoFocus
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => { setShowAddHospital(false); setNewHospitalInput(""); }}
+                    className="flex-1 py-2.5 rounded-xl border border-deep-100 text-body-sm font-medium text-deep-500 hover:bg-deep-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddHospital}
+                    disabled={!newHospitalInput.trim()}
+                    className="flex-1 py-2.5 rounded-xl bg-primary-500 text-body-sm font-medium text-white hover:bg-primary-600 transition-colors disabled:opacity-40"
+                  >
+                    Add
+                  </button>
+                </div>
+              </Card>
+            ) : (
+              <button
+                onClick={() => setShowAddHospital(true)}
+                className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl border border-dashed border-primary-300 text-primary-600 hover:bg-primary-50/50 transition-colors"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" /><path d="M12 8v8M8 12h8" />
                 </svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-body font-semibold text-deep-800">{hospitalName}</p>
-                <p className="text-body-sm text-deep-400">Type 2 Diabetes Mellitus</p>
-                <Badge variant="success" className="mt-2">Active</Badge>
-              </div>
-            </div>
-          </Card>
+                <span className="text-body-sm font-medium">Add another hospital record</span>
+              </button>
+            )}
+          </div>
         </section>
 
         {/* Treating Doctor */}
@@ -139,7 +211,7 @@ export default function ProfilePage() {
                   {mockTreatingDoctor.firstName} {mockTreatingDoctor.lastName}
                 </p>
                 <p className="text-body-sm text-deep-400">{mockTreatingDoctor.specialty}</p>
-                <p className="text-body-sm text-deep-300">{mockTreatingDoctor.hospitalName}</p>
+                <p className="text-body-sm text-deep-300">{hospitalName}</p>
               </div>
             </div>
           </Card>

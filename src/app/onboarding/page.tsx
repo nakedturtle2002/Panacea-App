@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Logo from "@/components/shared/Logo";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -100,15 +101,15 @@ export default function OnboardingPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-deep-400">Diagnosis</span>
-                <span className="font-medium text-deep-800">Type 2 Diabetes</span>
+                <span className="font-medium text-deep-800">Hypertension</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-deep-400">Prescriptions</span>
-                <span className="font-medium text-deep-800">3 medications</span>
+                <span className="font-medium text-deep-800">1 medication</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-deep-400">Next visit</span>
-                <span className="font-medium text-deep-800">Apr 15, 2024</span>
+                <span className="font-medium text-deep-800">Apr 22, 2026</span>
               </div>
             </div>
           </div>
@@ -126,7 +127,23 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen bg-gradient-main">
       <div className="page-container max-w-md mx-auto">
-        <Logo size="sm" variant="icon" className="mb-8" />
+        {/* Brand block: transparent SVG icon + styled wordmark */}
+        <div className="flex flex-col items-center mb-10">
+          <Image
+            src="/panacea-icon.png"
+            alt="Panacea icon"
+            width={80}
+            height={80}
+            priority
+            className="object-contain mb-3"
+          />
+          <span
+            className="font-medium leading-none text-primary-500"
+            style={{ fontSize: "2.1rem" }}
+          >
+            panacea
+          </span>
+        </div>
 
         {/* Progress */}
         <div className="flex gap-2 mb-8">

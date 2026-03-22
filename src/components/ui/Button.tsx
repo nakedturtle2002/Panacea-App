@@ -12,7 +12,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<string, string> = {
   primary:
-    "bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 active:from-primary-700 active:to-primary-800 text-white shadow-glow",
+    "bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 active:from-primary-600 active:to-primary-800 text-white glow-button",
   secondary:
     "bg-white/80 backdrop-blur-sm hover:bg-white active:bg-gray-50 text-deep-700 border border-white/50 shadow-soft",
   ghost:

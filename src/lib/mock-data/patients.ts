@@ -16,28 +16,16 @@ export const mockPatient: Patient = {
 export const mockMedicalRecord: MedicalRecord = {
   id: "mr1",
   patientId: "p1",
-  diagnosis: "Type 2 Diabetes Mellitus",
-  diseaseType: "diabetes",
+  diagnosis: "Hypertension",
+  diseaseType: "hypertension",
   prescriptions: [
     {
-      name: "Metformin",
-      dosage: "500mg",
-      frequency: "Twice daily",
-      instructions: "Take with meals, morning and evening",
-    },
-    {
-      name: "Glipizide",
-      dosage: "5mg",
+      name: "Exforge",
+      dosage: "5mg/80mg",
       frequency: "Once daily",
-      instructions: "Take 30 minutes before breakfast",
-    },
-    {
-      name: "Atorvastatin",
-      dosage: "20mg",
-      frequency: "Once daily",
-      instructions: "Take at bedtime",
+      instructions: "Take in the morning, before meals",
     },
   ],
-  nextFollowUp: "2024-04-15T10:00:00Z",
+  nextFollowUp: "2026-04-22T10:00:00Z",
   syncedAt: "2024-03-01T09:30:00Z",
 };

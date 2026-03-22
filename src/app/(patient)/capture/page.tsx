@@ -54,7 +54,7 @@ function CapturePageContent() {
   const isQuickAction = !!quickAction && !isCaptured;
 
   return (
-    <div className="min-h-screen bg-gradient-main">
+    <div className="min-h-screen bg-gradient-main" style={{ paddingTop: "env(safe-area-inset-top)" }}>
       <div className="page-container">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">

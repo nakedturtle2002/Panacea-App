@@ -18,7 +18,7 @@ export default function ChatPage() {
       patientId: "p1",
       role: "assistant",
       content:
-        "Hi there! I am your Panacea health assistant. I can help with general wellness questions, but I am not a replacement for your doctor. How can I help you today?",
+        "Hi there! I am your Panacea Health Assistant. I can help with general wellness questions, but I am not a replacement for your doctor. How can I help you today?",
       timestamp: new Date().toISOString(),
     },
   ]);
@@ -69,7 +69,7 @@ export default function ChatPage() {
     <div className="flex flex-col h-[calc(100vh-80px)]">
       {/* Header */}
       <div className="px-4 py-3 bg-white border-b border-border">
-        <h1 className="text-heading-3 text-navy-700">Health Assistant</h1>
+        <h1 className="text-heading-3 text-deep-800">Panacea Health Assistant</h1>
         <p className="text-xs text-gray-400">
           For general guidance only - not medical advice
         </p>
