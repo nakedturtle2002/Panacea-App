@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FEFDFD;
+    --surface: #FFFFFF;
+    --border: #D6D4D5;
+    --primary: #38C0C8;
+    --primary-dark: #28A0A8;
+    --text-primary: #1A1A1A;
+    --text-secondary: #8A8A8A;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --error: #EF4444;
+    --info: #28A0A8;
+    --glow-primary: rgba(56, 192, 200, 0.35);
+    --glow-blue: rgba(40, 160, 168, 0.2);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-deep-700 font-sans text-body;
+    min-height: 100vh;
+  }
+
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500 rounded-sm;
+  }
+
+  button, input, select, textarea {
+    min-height: 48px;
+  }
+}
+
+@layer components {
+  .page-container {
+    @apply max-w-lg mx-auto px-5 pb-8 pt-6;
+  }
+
+  .section-title {
+    @apply text-heading-2 text-deep-800 mb-4;
+  }
+
+  .card {
+    @apply bg-white/80 backdrop-blur-sm rounded-2xl border border-white/40 p-5 shadow-soft;
+  }
+
+  .card-glass {
+    @apply bg-white/60 backdrop-blur-md rounded-2xl border border-white/30 p-5 shadow-soft;
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-main {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F2FBFB 50%, #C8ECEC 100%);
+  }
+
+  .bg-gradient-hero {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F0F9FA 45%, #C8ECEC 100%);
+  }
+
+  .bg-gradient-dark {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F2FBFB 50%, #C8ECEC 100%);
+  }
+
+  .bg-gradient-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(220,245,245,0.7) 100%);
+  }
+
+  /* Glow effects */
+  .glow-primary {
+    box-shadow: 0 0 20px var(--glow-primary), 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  .glow-soft {
+    box-shadow: 0 0 0 10px rgba(255,255,255,0.85), 0 0 50px rgba(56,192,200,0.35), 0 8px 24px rgba(0,0,0,0.06);
+  }
+
+  .glow-button {
+    box-shadow: 0 6px 28px rgba(56, 192, 200, 0.55), 0 2px 8px rgba(0,0,0,0.07);
+  }
+
+  /* Soft shadow */
+  .shadow-soft {
+    box-shadow: 0 2px 12px rgba(40, 160, 168, 0.08), 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 6px 28px rgba(56, 192, 200, 0.5), 0 2px 8px rgba(0,0,0,0.06);
+  }
+}
